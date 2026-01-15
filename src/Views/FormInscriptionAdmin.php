@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire Admin</title>
-    <link rel="stylesheet" href="./styles/styleFormInscription.css">
+    <link rel="stylesheet" href='../styles/styleFormInscription.css'>
 </head>
 <body>
     <div class="container">
@@ -66,28 +66,5 @@
             Déjà inscrit? <a href="#">Connectez-vous ici</a>
         </div>
     </div>
-
-    <script>
-        document.getElementById('adminForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = {
-                fullname: document.getElementById('fullname').value,
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
-                phone: document.getElementById('phone').value,
-                department: document.getElementById('department').value,
-                role: document.getElementById('role').value,
-                address: document.getElementById('address').value,
-                city: document.getElementById('city').value
-            };
-            
-            console.log('Données du formulaire:', formData);
-            alert('Compte créé avec succès!');
-            
-            // Réinitialiser le formulaire
-            this.reset();
-        });
-    </script>
 </body>
 </html>
