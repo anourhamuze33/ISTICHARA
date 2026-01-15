@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Avocats</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(120deg, #1a252f 0%, #2c3e50 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(231, 76, 60, 0.1) 0%, transparent 70%);
+            animation: shine 8s linear infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4),
+                        0 0 80px rgba(231, 76, 60, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-top: 5px solid #e74c3c;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #e74c3c, #f39c12, #e74c3c, #f39c12);
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            background-size: 300% 300%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        .header:hover::before {
+            opacity: 0.6;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #e74c3c, transparent);
+            margin: 30px 0;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 2;
+            min-width: 250px;
+        }
+
+        .filter-box {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-box input,
+        .filter-box select {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .filter-box select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232c3e50' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            padding-right: 45px;
+        }
+
+        .search-box input:focus,
+        .filter-box select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.1),
+                        0 0 20px rgba(231, 76, 60, 0.2);
+        }
+
+        .search-box input:hover,
+        .filter-box select:hover {
+            border-color: #95a5a6;
+        }
+
+        .btn-filter {
+            padding: 16px 30px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            margin-bottom: 3rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .btn-filter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-filter:hover::before {
+            left: 100%;
+        }
+
+        .btn-filter:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(231, 76, 60, 0.5),
+                        0 0 30px rgba(231, 76, 60, 0.4);
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3),
+                        0 0 40px rgba(231, 76, 60, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-top: 4px solid #e74c3c;
+            position: relative;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #e74c3c, #f39c12, #e74c3c, #f39c12);
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            background-size: 300% 300%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                        0 0 80px rgba(231, 76, 60, 0.4);
+        }
+
+        .card:hover::before {
+            opacity: 0.7;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .card-title {
+            color: #2c3e50;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .card-email {
+            color: #7f8c8d;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .info-label {
+            color: #7f8c8d;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-oui {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-non {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-male {
+            background-color: #cfe2ff;
+            color: #084298;
+        }
+
+        .badge-female {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        .specialite-box {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-top: 4px solid #e74c3c;
+        }
+
+        .no-results p {
+            color: #7f8c8d;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .search-filter-section {
+                flex-direction: column;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Liste des Avocats & Huissiers</h1>
+            <p class="subtitle">Gestion des professionnels</p>
+            
+            <div class="divider"></div>
+
+            <form method="GET" action="">
+                <div class="search-filter-section">
+                    <div class="search-box">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            placeholder="Rechercher par nom ou email..." 
+                            value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+                    </div>
+                    <div class="filter-box">
+                        <select name="ville_filter">
+                            <option value="">Toutes les villes</option>
+                            <?php
+                            require_once "../app/Models/Ville.php";
+                            $ville = new Ville();
+                            $villes = $ville->getAllVilles();
+                            foreach ($villes as $ville):
+                                $selected = (isset($_GET['ville_filter']) && $_GET['ville_filter'] == $ville['id']) ? 'selected' : '';
+                            ?>
+                                <option value="<?= $ville['id'] ?>" <?= $selected ?>>
+                                    <?= htmlspecialchars($ville['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn-filter">Filtrer</button>
+                </div>
+            </form>
+        </div>
+<a href="avocat/store"><button class="btn-filter">Ajouter Avocat</button></a>
+        
+
+        <!-- Cards Grid -->
+        <div class="cards-grid">
+<?php
+require_once "../app/Models/Avocat.php";
+$avocat = new Avocat();
+$avocats = $avocat->getAllAvocats();
+if(count($avocats)>=1){
+foreach($avocats as $avocat):
+?>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><?= htmlspecialchars($avocat['full_name']) ?></div>
+                            <div class="card-email"><?= htmlspecialchars($avocat['email']) ?></div>
+                        </div>
+                    </div>
+
+                    <div class="specialite-box">
+                        <?= htmlspecialchars($avocat['specialite']) ?>
+                    </div>
+
+                    <div class="card-info">
+                        <div class="info-row">
+                            <span class="info-label">Âge</span>
+                            <span class="info-value"><?= $avocat['age'] ?> ans</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Sexe</span>
+                            <span class="badge badge-<?= $avocat['sexe'] ?>">
+                                <?= $avocat['sexe'] == 'male' ? 'Homme' : 'Femme' ?>
+                            </span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Expérience</span>
+                            <span class="info-value"><?= $avocat['annes_experience'] ?> ans</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Consultation en ligne</span>
+                            <span class="badge badge-<?= $avocat['consult_en_ligne'] ?>">
+                                <?= $avocat['consult_en_ligne'] == 'yes' ? 'Oui' : 'Non' ?>
+                            </span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Ville</span>
+                            <span class="info-value"><?= htmlspecialchars($avocat['ville']) ?></span>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <a href="editAvocat?id=<?= $avocat['id'] ?>" class="btn-action btn-edit">Modifier</a>
+                        <form method="POST" action="delete.php" style="flex: 1;">
+                            <input type="hidden" name="id" value="<?= $avocat['id'] ?>">
+                            <button type="submit" class="btn-action btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet avocat?')">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            <?php 
+            endforeach;
+        }
+            else{
+            ?>
+                <div class="no-results">
+                    <p>Aucun avocat trouvé</p>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+</body>
+</html>
