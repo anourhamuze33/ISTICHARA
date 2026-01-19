@@ -76,7 +76,7 @@
 
                             <div class="info-row">
                                 <span class="info-label">Sexe</span>
-                                <span class="badge badge-<?= $avohuissiercat['sexe'] ?>">
+                                <span class="badge badge-<?= $huissier['sexe'] ?>">
                                     <?= $huissier['sexe'] == 'male' ? 'Homme' : 'Femme' ?>
                                 </span>
                             </div>
