@@ -1,20 +1,21 @@
 <?php
 require_once "../app/Helper/Database.php";
-require_once "../src/Views/AvocatAffichage.php";
+require_once "../src/Views/HuissierAffichage.php";
 ?>
+
 <script>
     const input = document.getElementById('recherche');
     const container = document.getElementById('container');
 
     input.addEventListener("input", async (e) => {
         let inp = input.value;
-        const fichier = `avocat/filter?name=${inp}`
+        const fichier = `huissier/filter?name=${inp}`
         Response = await fetch(fichier).then(data => data.json()).then(data => {            
             container.innerHTML = "";
-                if(data[0].full_name == ''){
+                if(data[0].full_name == undefined){
                                 container.innerHTML = `
                 <div class="no-results">
-                    <p>Aucun avocat trouvé</p>
+                    <p>Aucun huissier trouvé</p>
                 </div>
                 `
             }
@@ -32,7 +33,7 @@ require_once "../src/Views/AvocatAffichage.php";
                         </div>
 
                         <div class="specialite-box">
-                        ${info.specialite}
+                        ${info.type_actes}
                         </div>
 
                         <div class="card-info">
@@ -51,13 +52,6 @@ require_once "../src/Views/AvocatAffichage.php";
                             <div class="info-row">
                                 <span class="info-label">Expérience</span>
                                 <span class="info-value">${info.annes_experience} ans</span>
-                            </div>
-
-                            <div class="info-row">
-                                <span class="info-label">Consultation en ligne</span>
-                                <span class="badge badge-${info.consult_en_ligne}">
-                                    ${info.consult_en_ligne}
-                                </span>
                             </div>
 
                             <div class="info-row">
@@ -87,13 +81,13 @@ require_once "../src/Views/AvocatAffichage.php";
     const select = document.getElementById('select');
     select.addEventListener("change", async (e) => {
         let inp = select.value;
-        const fichier = `avocat/filter?ville_id=${inp}`
+        const fichier = `huissier/filter?ville_id=${inp}`
         Response = await fetch(fichier).then(data => data.json()).then(data => {            
             container.innerHTML = "";
-                if(data[0].full_name == ''){
+                if(data[0].full_name == undefined){
                 container.innerHTML = `
                 <div class="no-results">
-                    <p>Aucun avocat trouvé</p>
+                    <p>Aucun huissier trouvé</p>
                 </div>
                 `
             }
@@ -111,7 +105,7 @@ require_once "../src/Views/AvocatAffichage.php";
                         </div>
 
                         <div class="specialite-box">
-                        ${info.specialite}
+                        ${info.type_actes}
                         </div>
 
                         <div class="card-info">
@@ -130,13 +124,6 @@ require_once "../src/Views/AvocatAffichage.php";
                             <div class="info-row">
                                 <span class="info-label">Expérience</span>
                                 <span class="info-value">${info.annes_experience} ans</span>
-                            </div>
-
-                            <div class="info-row">
-                                <span class="info-label">Consultation en ligne</span>
-                                <span class="badge badge-${info.consult_en_ligne}">
-                                    ${info.consult_en_ligne}
-                                </span>
                             </div>
 
                             <div class="info-row">

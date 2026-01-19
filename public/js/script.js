@@ -41,3 +41,4 @@ selectedHuissier.addEventListener("click", (e)=>{
             </div>
          `
 });
+

@@ -14,42 +14,45 @@
         <p class="subtitle">Ajouter</p>
 
         <div class="divider"></div>
-
         <form id="AvocatForm" action="/avocat/store" method="POST">
+            <input type="hidden" name="id_type" value="<?= $_GET['id'] ?? "" ?>">
+
             <div class="form-group">
                 <label for="fullname">NOM COMPLET</label>
-                <input type="text" id="fullname" name="full_name" placeholder="Entrez votre nom complet" required>
+                <input type="text" id="fullname" name="full_name" class="inputs" placeholder="Entrez votre nom complet" required>
             </div>
 
             <div class="form-group">
                 <label for="email">ADRESSE EMAIL</label>
-                <input type="email" id="email" name="email" placeholder="votre.email@exemple.com" required>
+                <input type="email" id="email" name="email" class="inputs" placeholder="votre.email@exemple.com" required>
             </div>
+            <?php
+            if (!isset($_GET['id'])):
+            ?>
+                <div class="form-group">
+                    <label for="password">MOT DE PASSE</label>
+                    <input type="password" id="password" name="password_hash" placeholder="Créez un mot de passe fort" required>
+                </div>
 
-            <div class="form-group">
-                <label for="password">MOT DE PASSE</label>
-                <input type="password" id="password" name="password_hash" placeholder="Créez un mot de passe fort" required>
-            </div>
-
-            <div class="form-group">
-                <label for="passwordConfirmation">CONFIRMER LE MOT DE PASSE</label>
-                <input type="password" id="passwordConfirmation" name="passwordConfirmation" placeholder="Confirmer le mot de passe" required>
-            </div>
-
+                <div class="form-group">
+                    <label for="passwordConfirmation">CONFIRMER LE MOT DE PASSE</label>
+                    <input type="password" id="passwordConfirmation" name="passwordConfirmation" placeholder="Confirmer le mot de passe" required>
+                </div>
+            <?php endif; ?>
             <div class="form-group">
                 <label for="age">ÂGE</label>
-                <input type="number" id="age" name="age" placeholder="Votre âge" required>
+                <input type="number" id="age" name="age" class="inputs" placeholder="Votre âge" required>
             </div>
 
             <div class="form-group">
                 <label>SEXE</label>
                 <div class="radio-group">
                     <div class="radio-option">
-                        <input type="radio" id="male" name="sexe" value="male">
+                        <input type="radio" id="male" class="inputs" name="sexe" value="male">
                         <label for="male">Homme</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="female" name="sexe" value="female">
+                        <input type="radio" id="female" class="inputs" name="sexe" value="female">
                         <label for="female">Femme</label>
                     </div>
                 </div>
@@ -57,12 +60,12 @@
 
             <div class="form-group">
                 <label for="annes_experience">ANNÉES D'EXPÉRIENCE</label>
-                <input type="number" id="annes_experience" name="annes_experience" placeholder="Nombre d'années" required>
+                <input type="number" id="annes_experience" class="inputs" name="annes_experience" placeholder="Nombre d'années" required>
             </div>
 
             <div class="form-group">
                 <label for="ville">VILLE</label>
-                <select class="form-select" id="VilleSelect" name="ville_id" required>
+                <select class="form-select inputs" id="VilleSelect" name="ville_id" required>
                     <option value=""> Choisir une ville </option>
 
                     <?php
@@ -82,21 +85,34 @@
                 <label>TYPE</label>
                 <div class="radio-group">
                     <div class="radio-option">
-                        <input type="radio" id="Avocat" name="type" value="Avocat">
+                        <input type="radio" id="Avocat" class="inputs"  name="type" value="Avocat">
                         <label for="Avocat">Avocat</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="Huissier" name="type" value="Huissier">
+                        <input type="radio" id="Huissier" class="inputs" name="type" value="Huissier">
                         <label for="Huissier">Huissier</label>
                     </div>
                 </div>
             </div>
-<div class="type">
-      
-    </div>
+            <div class="type">
+
+            </div>
+                        <?php
+            if (!isset($_GET['id'])){
+            ?>
+            <input type="hidden" name="action" value="create">
             <button type="submit" class="btn-submit">Ajouter</button>
+            <?php }
+            else {
+                ?>
+            <input type="hidden" name="action" value="update">
+            <button type="submit" class="btn-submit">Update</button>
+<?php }?>
+            
+
         </form>
     </div>
     <script src="../js/script.js"></script>
 </body>
+
 </html>
